@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Register</title>
+</head>
+<body>
+  <div class="main-container">
+    <h2>Registro</h2>
+    <form method="post">
+      Usuario: <input type="text" name="username" required><br>
+      Contraseña: <input type="password" name="password" required><br>
+      <!--Rol:
+      <select name="rol">
+        <option value="admin">Admin</option>
+        <option value="manager">Manager</option>
+        <option value="user">Usuario</option>
+      </select><br> -->
+      <input type="submit" value="Registrar">
+    </form>
+  </div>
+    
+</body>
+</html>
+
+

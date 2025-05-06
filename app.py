@@ -17,11 +17,7 @@ app.config['MYSQL_DB'] = 'inmo'
 # Inicializar la extensión MySQL para Flask
 mysql = MySQL(app)
 
-@app.route('/')
-def home():
-    return render_template('home.html')  # Página principal con botones
-
-@app.route('/login', methods=['GET', 'POST'])  # Ahora permite GET también
+@app.route('/', methods=['GET', 'POST'])  # Ahora permite GET también
 def login():
     if request.method == 'POST':
         username = request.form['username']

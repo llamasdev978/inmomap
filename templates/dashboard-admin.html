@@ -9,14 +9,6 @@
 <body>
     <h1>Bienvenido, tu rol es: {{ rol }}</h1>
 
-    {% if rol == 'admin' %}
-    <p>Tienes acceso completo como administrador.</p>
-    {% elif rol == 'manager' %}
-    <p>Eres un gestor con acceso intermedio.</p>
-    {% elif rol == 'user' %}
-    <p>Eres un usuario con acceso limitado.</p>
-    {% endif %}
-
     <a href="{{ url_for('logout') }}">Cerrar sesión</a>
 </body>
 </html>

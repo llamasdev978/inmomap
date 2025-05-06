@@ -34,7 +34,15 @@ def login():
         if account:
             session['username'] = account['username']
             session['rol'] = account['rol']
-            return redirect(url_for('dashboard'))
+
+            if session['rol'] == 'user':
+                return redirect(url_for('dashboardUser'))
+            elif session['rol'] == 'manager':
+                return redirect(url_for('dashboardManager'))
+            elif session['rol'] == 'admin':
+                return redirect(url_for('dashboardAdmin'))
+
+
         else:
             return "Credenciales incorrectas"
     return render_template('login.html')  # Si GET, muestra login
@@ -46,7 +54,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        rol = "usuario"
+        rol = "user"
 
         cursor = mysql.connection.cursor()
         try:
@@ -54,26 +62,42 @@ def register():
             cursor.execute('INSERT INTO usuarios (username, password, rol) VALUES (%s, %s, %s)',
                            (username, password, rol))
             mysql.connection.commit()
-            return redirect(url_for('index'))
+            return redirect(url_for('home'))
         except MySQLdb.IntegrityError:
             # Usuario duplicado
             return "Usuario ya existe"
     return render_template('register.html')
 
 # Página protegida que muestra el rol actual
-@app.route('/dashboard')
-def dashboard():
+@app.route('/dashboard-user')
+def dashboardUser():
     if 'rol' not in session:
         # Redirigir al login si no hay sesión iniciada
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
     # Mostrar el rol del usuario logueado
-    return render_template('dashboard.html', rol=session['rol'])
+    return render_template('dashboard-user.html', rol=session['rol'])
+
+@app.route('/dashboard-manager')
+def dashboardManager():
+    if 'rol' not in session:
+        # Redirigir al login si no hay sesión iniciada
+        return redirect(url_for('home'))
+    # Mostrar el rol del usuario logueado
+    return render_template('dashboard-manager.html', rol=session['rol'])
+
+@app.route('/dashboard-admin')
+def dashboardAdmin():
+    if 'rol' not in session:
+        # Redirigir al login si no hay sesión iniciada
+        return redirect(url_for('home'))
+    # Mostrar el rol del usuario logueado
+    return render_template('dashboard-admin.html', rol=session['rol'])
 
 # Ruta para cerrar sesión
 @app.route('/logout')
 def logout():
     session.clear()  # Eliminar todos los datos de la sesión
-    return redirect(url_for('index'))
+    return redirect(url_for('home'))
 
 # Ejecutar la aplicación
 if __name__ == '__main__':

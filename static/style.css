@@ -4,14 +4,18 @@ body {
   
   h1 {
     font-size: 3em;
-    color: #2c3e50;
+    color: #49502c;
   }
 
   h2 {
     font-size: 2em;
-    color: #2c3e50;
+    color: #4c502c;
   }
   
+  .imagen-home {
+    height: 25%;
+  }
+
   .main-container {
     display: flex;
     justify-content: center;
@@ -38,4 +42,7 @@ body {
   .btn:hover {
     background-color: #2980b9;
   }
+  
+
+  /* Estilos formularios */
   

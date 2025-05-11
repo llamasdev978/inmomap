@@ -8,13 +8,15 @@
 </head>
 <body>
   <div class="main-container">
-    <h2>Login</h2>
+    <h2>Iniciar sesión</h2>
     <form class="form-default" method="post" action="{{ url_for('login') }}">
-      Usuario: <input class="caca" type="text" name="username" required><br>
-      Contraseña: <input type="password" name="password" required><br>
-      <input type="submit" value="Iniciar sesión">
+      Usuario: <input class="form-input" type="text" name="username" required><br>
+      Contraseña: <input class="form-input" type="password" name="password" required><br>
+      <div class="container-horizontal">
+        <input class="btn" type="submit" value="Iniciar sesión">
+        <a class="btn" href="{{ url_for('register') }}">Registrarse</a>
+      </div>
     </form>
-    <a href="{{ url_for('register') }}">Registrarse</a>
   </div>
 </body>
 </html>

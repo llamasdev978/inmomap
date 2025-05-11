@@ -7,9 +7,10 @@
     <title>Dash</title>
 </head>
 <body>
-    <h1>Bienvenido, tu rol es: {{ rol }}</h1>
+    <div class="dash-main-container">
+        <h1>Bienvenido, tu rol es: {{ rol }}</h1><a href="{{ url_for('logout') }}">Cerrar sesión</a>
 
-    <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+    </div>
 </body>
 </html>
 

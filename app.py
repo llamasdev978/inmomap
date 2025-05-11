@@ -50,15 +50,17 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        name = request.form['nombre']
+        mail = request.form['mail']
         rol = "user"
 
         cursor = mysql.connection.cursor()
         try:
             # Insertar nuevo usuario en la base de datos
-            cursor.execute('INSERT INTO usuarios (username, password, rol) VALUES (%s, %s, %s)',
-                           (username, password, rol))
+            cursor.execute('INSERT INTO usuarios (username, password, rol, email, nombre) VALUES (%s, %s, %s, %s, %s)',
+                           (username, password, rol, mail, name))
             mysql.connection.commit()
-            return redirect(url_for('home'))
+            return redirect(url_for('login'))
         except MySQLdb.IntegrityError:
             # Usuario duplicado
             return "Usuario ya existe"
@@ -69,7 +71,7 @@ def register():
 def dashboardUser():
     if 'rol' not in session:
         # Redirigir al login si no hay sesión iniciada
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     # Mostrar el rol del usuario logueado
     return render_template('dashboard-user.html', rol=session['rol'])
 
@@ -77,7 +79,7 @@ def dashboardUser():
 def dashboardManager():
     if 'rol' not in session:
         # Redirigir al login si no hay sesión iniciada
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     # Mostrar el rol del usuario logueado
     return render_template('dashboard-manager.html', rol=session['rol'])
 
@@ -85,7 +87,7 @@ def dashboardManager():
 def dashboardAdmin():
     if 'rol' not in session:
         # Redirigir al login si no hay sesión iniciada
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     # Mostrar el rol del usuario logueado
     return render_template('dashboard-admin.html', rol=session['rol'])
 
@@ -93,7 +95,7 @@ def dashboardAdmin():
 @app.route('/logout')
 def logout():
     session.clear()  # Eliminar todos los datos de la sesión
-    return redirect(url_for('home'))
+    return redirect(url_for('login'))
 
 # Ejecutar la aplicación
 if __name__ == '__main__':

@@ -9,16 +9,12 @@
 <body>
   <div class="main-container">
     <h2>Registro</h2>
-    <form method="post">
-      Usuario: <input type="text" name="username" required><br>
-      Contraseña: <input type="password" name="password" required><br>
-      <!--Rol:
-      <select name="rol">
-        <option value="admin">Admin</option>
-        <option value="manager">Manager</option>
-        <option value="user">Usuario</option>
-      </select><br> -->
-      <input type="submit" value="Registrar">
+    <form class="form-default" method="post">
+      Usuario: <input class="form-input" type="text" name="username" required><br>
+      Nombre: <input class="form-input" type="text" name="nombre" required><br>
+      Correo electronico: <input class="form-input" type="text" name="mail" required><br>
+      Contraseña: <input class="form-input" type="password" name="password" required><br>
+      <input class="btn" type="submit" value="Registrar">
     </form>
   </div>
     
@@ -26,3 +22,9 @@
 </html>
 
 
+<!--Rol:
+      <select name="rol">
+        <option value="admin">Admin</option>
+        <option value="manager">Manager</option>
+        <option value="user">Usuario</option>
+      </select><br> -->

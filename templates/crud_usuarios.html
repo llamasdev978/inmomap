@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Usuarios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="centered">
+    <div class="main-container" style="width: 90%; max-width: 70%;">
+        <h1>Gestión de Usuarios</h1>
+        <a href="{{ url_for('dashboardAdmin') }}" class="btn">← Volver al Dashboard</a>
+        <table class="tabla-usuarios">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in usuarios %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.username }}</td>
+                    <td>{{ u.nombre }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ u.rol }}</td>
+                    <td>
+                        <a class="mini-btn" href="{{ url_for('editar_usuario', id=u.id) }}">Editar</a>
+                        <a class="mini-btn-red" href="{{ url_for('eliminar_usuario', id=u.id) }}">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

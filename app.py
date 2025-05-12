@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 
@@ -91,11 +91,83 @@ def dashboardAdmin():
     # Mostrar el rol del usuario logueado
     return render_template('dashboard-admin.html', rol=session['rol'])
 
+@app.route('/zona/<nombre>')
+def obtener_zona(nombre):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM zonas WHERE nombre = %s', (nombre,))
+    zona = cursor.fetchone()
+    if zona:
+        return jsonify(zona)
+    return jsonify({'error': 'Zona no encontrada'}), 404
+
 # Ruta para cerrar sesión
 @app.route('/logout')
 def logout():
     session.clear()  # Eliminar todos los datos de la sesión
     return redirect(url_for('login'))
+
+@app.route('/admin/usuarios')
+def listar_usuarios():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM usuarios")
+    usuarios = cursor.fetchall()
+    return render_template('crud_usuarios.html', usuarios=usuarios)
+
+@app.route('/admin/usuarios/editar/<int:id>', methods=['GET', 'POST'])
+def editar_usuario(id):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        nombre = request.form['nombre']
+        rol = request.form['rol']
+        cursor.execute("UPDATE usuarios SET username=%s, email=%s, nombre=%s, rol=%s WHERE id=%s",
+                       (username, email, nombre, rol, id))
+        mysql.connection.commit()
+        return redirect(url_for('listar_usuarios'))
+    cursor.execute("SELECT * FROM usuarios WHERE id = %s", (id,))
+    usuario = cursor.fetchone()
+    return render_template('editar_usuario.html', usuario=usuario)
+
+@app.route('/admin/usuarios/eliminar/<int:id>')
+def eliminar_usuario(id):
+    cursor = mysql.connection.cursor()
+    cursor.execute("DELETE FROM usuarios WHERE id = %s", (id,))
+    mysql.connection.commit()
+    return redirect(url_for('listar_usuarios'))
+
+@app.route('/admin/zonas')
+def listar_zonas():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM zonas")
+    zonas = cursor.fetchall()
+    return render_template('crud_zonas.html', zonas=zonas)
+
+@app.route('/admin/zonas/editar/<int:id>', methods=['GET', 'POST'])
+def editar_zona(id):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        descripcion = request.form['descripcion']
+        precio_m2 = request.form['precio_m2']
+        poblacion = request.form['poblacion_total']
+        municipios = request.form['municipios']
+        imagen = request.form['imagen_destacada']
+        cursor.execute("""UPDATE zonas SET nombre=%s, descripcion=%s, precio_m2=%s,
+                          poblacion_total=%s, municipios=%s, imagen_destacada=%s WHERE id=%s""",
+                       (nombre, descripcion, precio_m2, poblacion, municipios, imagen, id))
+        mysql.connection.commit()
+        return redirect(url_for('listar_zonas'))
+    cursor.execute("SELECT * FROM zonas WHERE id = %s", (id,))
+    zona = cursor.fetchone()
+    return render_template('editar_zona.html', zona=zona)
+
+@app.route('/admin/zonas/eliminar/<int:id>')
+def eliminar_zona(id):
+    cursor = mysql.connection.cursor()
+    cursor.execute("DELETE FROM zonas WHERE id = %s", (id,))
+    mysql.connection.commit()
+    return redirect(url_for('listar_zonas'))
 
 # Ejecutar la aplicación
 if __name__ == '__main__':

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 12, 2025 at 05:09 AM
+-- Generation Time: May 12, 2025 at 01:25 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,13 +42,10 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `username`, `password`, `rol`, `email`, `nombre`) VALUES
 (1, 'aaa', '123', 'admin', '', ''),
-(2, 'bbb', '123', 'manager', '', ''),
-(3, 'ccc', '123', 'user', '', ''),
-(4, 'ddd', '123', 'admin', '', ''),
-(5, 'eee', '123', 'manager', '', ''),
-(6, 'fff', '123', 'user', '', ''),
-(7, 'Mario', '123', 'admin', '', ''),
-(8, 'ttttt', 'ttttt', 'admin', 'tttt@gmail.com', 'ttttt');
+(9, 'admin', 'admin', 'admin', 'admin@admin.es', 'admin'),
+(10, 'user', 'user', 'user', 'user@user.es', 'user'),
+(11, 'manager', 'manager', 'manager', 'manager@manager.es', 'manager'),
+(12, 'kljgheklghevkl', 'hkjechgkjerg', 'admin', 'mail@mail.es', 'lg ehvgkseg');
 
 -- --------------------------------------------------------
 
@@ -72,7 +69,7 @@ CREATE TABLE `zonas` (
 
 INSERT INTO `zonas` (`id`, `nombre`, `descripcion`, `precio_m2`, `poblacion_total`, `municipios`, `imagen_destacada`) VALUES
 (1, 'norte', 'Zona residencial con buen acceso a la sierra, alta calidad de vida.', 3250.50, 500000, 'Alcobendas, San Sebastián de los Reyes, Tres Cantos', 'img/1.png'),
-(2, 'sur', 'Zona con buena conexión al centro, precios más asequibles.', 2100.00, 650000, 'Getafe, Leganés, Fuenlabrada', 'img/2.png'),
+(2, 'sur', 'Zona con buena conexión al centro, precios más asequibles.', 2100.00, 65000, 'Getafe, Leganés, Fuenlabrada', 'img/2.png'),
 (3, 'este', 'Área en expansión, buena oferta educativa y comercial.', 2400.75, 420000, 'Alcalá de Henares, Torrejón de Ardoz', 'img/3.png'),
 (4, 'oeste', 'Zona tranquila con urbanizaciones y zonas verdes.', 2800.20, 390000, 'Móstoles, Alcorcón, Boadilla', 'img/4.png'),
 (5, 'centro', 'Corazón de Madrid, precios elevados y mucha actividad.', 4850.90, 750000, 'Centro, Chamberí, Salamanca', 'img/5.png');
@@ -103,7 +100,7 @@ ALTER TABLE `zonas`
 -- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `zonas`

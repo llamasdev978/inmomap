@@ -9,25 +9,33 @@
     <div class="main-container" style="width: 500px;">
         <h2>Editar Zona</h2>
         <form method="POST">
-            <label>Nombre:</label>
-            <input type="text" name="nombre" value="{{ zona.nombre }}" required>
-            
-            <label>Descripción:</label>
-            <input type="text" name="descripcion" value="{{ zona.descripcion }}" required>
-            
-            <label>Precio €/m²:</label>
-            <input type="text" name="precio_m2" value="{{ zona.precio_m2 }}" required>
-            
-            <label>Población:</label>
-            <input type="text" name="poblacion_total" value="{{ zona.poblacion_total }}">
-            
-            <label>Municipios:</label>
-            <input type="text" name="municipios" value="{{ zona.municipios }}">
-
-            <label>Imagen destacada:</label>
-            <input type="text" name="imagen_destacada" value="{{ zona.imagen_destacada }}">
-
+            <div class="form-zonas">
+                <div class="content-editar-zonas">
+                    <label>Nombre:</label>
+                    <input type="text" name="nombre" value="{{ zona.nombre }}" required>
+                    
+                    <label>Descripción:</label>
+                    <input type="text" name="descripcion" value="{{ zona.descripcion }}" required>
+                    
+                    <label>Precio €/m²:</label>
+                    <input type="text" name="precio_m2" value="{{ zona.precio_m2 }}" required>
+    
+                </div>
+                <div class="content-editar-zonas">
+                    <label>Población:</label>
+                    <input type="text" name="poblacion_total" value="{{ zona.poblacion_total }}">
+                    
+                    <label>Municipios:</label>
+                    <input type="text" name="municipios" value="{{ zona.municipios }}">
+        
+                    <label>Imagen destacada:</label>
+                    <input type="text" name="imagen_destacada" value="{{ zona.imagen_destacada }}">
+    
+                </div>
+            </div>
             <input type="submit" value="Guardar Cambios" class="btn">
+            
+
         </form>
         <br>
         <a href="{{ url_for('listar_zonas') }}" class="btn">← Volver a la lista de zonas</a>

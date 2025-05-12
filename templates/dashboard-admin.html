@@ -7,6 +7,7 @@
 </head>
 <body>
     <div class="dash-main-container">
+      <p class="dash-p">Mapa interactivo Comunidad de Madrid</p>
         <div class="dashboard-content">
             <div class="map-grid">
                 <img src="{{ url_for('static', filename='img/norte.png') }}" class="zona" alt="Norte" onclick="mostrarInfo('norte')">
@@ -41,10 +42,10 @@
       
             const data = await response.json();
             infoBox.innerHTML = `
-              <h2>${data.nombre.toUpperCase()}</h2>
+              <h2>ZONA ${data.nombre.toUpperCase()}</h2>
               <p><strong>Descripción:</strong> ${data.descripcion}</p>
               <p><strong>Precio por m²:</strong> ${data.precio_m2} €</p>
-              <p><strong>Población:</strong> ${data.poblacion_total}</p>
+              <p><strong>Población:</strong> ${data.poblacion_total} habitantes</p>
               <p><strong>Municipios:</strong> ${data.municipios}</p>
               <img src="/static/${data.imagen_destacada}" style="max-width: 100%; margin-top: 1rem;">
             `;

@@ -1,16 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Manager</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Dash</title>
 </head>
 <body>
-    <h1>Bienvenido, tu rol es: {{ rol }}</h1>
+    <div class="dash-main-container">
+        <div class="dashboard-content">
+            <div class="map-grid">
+                <img src="{{ url_for('static', filename='img/norte.png') }}" class="zona" alt="Norte" onclick="mostrarInfo('norte')">
+                <img src="{{ url_for('static', filename='img/sur.png') }}" class="zona" alt="Sur" onclick="mostrarInfo('sur')">
+                <img src="{{ url_for('static', filename='img/este.png') }}" class="zona" alt="Este" onclick="mostrarInfo('este')">
+                <img src="{{ url_for('static', filename='img/oeste.png') }}" class="zona" alt="Oeste" onclick="mostrarInfo('oeste')">
+                <img src="{{ url_for('static', filename='img/centro.png') }}" class="zona" alt="Centro" onclick="mostrarInfo('centro')">
+            </div>
 
-    <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+              
+            <div class="info-container">
+                <div class="info-box">
+                  Haz clic en una zona para ver la información aquí.
+                </div>
+                <div class="buttons-row">
+                  <a href="{{ url_for('listar_zonas') }}" class="mini-btn">CRUD Zonas</a>
+                  <a href="{{ url_for('logout') }}" class="mini-btn-red">Cerrar sesión</a>
+                </div>
+              </div>
+        </div>
+    </div>
+
+    <script>
+        async function mostrarInfo(zona) {
+          const infoBox = document.querySelector('.info-box');
+          infoBox.innerHTML = "<em>Cargando información...</em>";
+      
+          try {
+            const response = await fetch(`/zona/${zona}`);
+            if (!response.ok) throw new Error("Zona no encontrada");
+      
+            const data = await response.json();
+            infoBox.innerHTML = `
+              <h2>${data.nombre.toUpperCase()}</h2>
+              <p><strong>Descripción:</strong> ${data.descripcion}</p>
+              <p><strong>Precio por m²:</strong> ${data.precio_m2} €</p>
+              <p><strong>Población:</strong> ${data.poblacion_total}</p>
+              <p><strong>Municipios:</strong> ${data.municipios}</p>
+              <img src="/static/${data.imagen_destacada}" style="max-width: 100%; margin-top: 1rem;">
+            `;
+          } catch (error) {
+            infoBox.innerHTML = "<p style='color: red;'>Error al cargar información.</p>";
+          }
+        }
+      </script>
 </body>
 </html>
-
-

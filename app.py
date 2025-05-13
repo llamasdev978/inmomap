@@ -40,7 +40,7 @@ def login():
 
 
         else:
-            return "Credenciales incorrectas"
+            return render_template('incorrecto.html') # Si las credenciales son incorrectas
     return render_template('login.html')  # Si GET, muestra login
 
 
@@ -143,6 +143,7 @@ def listar_zonas():
     zonas = cursor.fetchall()
     return render_template('crud_zonas.html', zonas=zonas)
 
+
 @app.route('/admin/zonas/editar/<int:id>', methods=['GET', 'POST'])
 def editar_zona(id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -169,6 +170,41 @@ def eliminar_zona(id):
     mysql.connection.commit()
     return redirect(url_for('listar_zonas'))
 
-# Ejecutar la aplicación
+
+@app.route('/manager/zonas')
+def listar_zonas_manager():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM zonas")
+    zonas = cursor.fetchall()
+    return render_template('crud_zonas_manager.html', zonas=zonas)
+
+
+@app.route('/manager/zonas/editar/<int:id>', methods=['GET', 'POST'])
+def editar_zona_manager(id):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        descripcion = request.form['descripcion']
+        precio_m2 = request.form['precio_m2']
+        poblacion = request.form['poblacion_total']
+        municipios = request.form['municipios']
+        imagen = request.form['imagen_destacada']
+        cursor.execute("""UPDATE zonas SET nombre=%s, descripcion=%s, precio_m2=%s,
+                          poblacion_total=%s, municipios=%s, imagen_destacada=%s WHERE id=%s""",
+                       (nombre, descripcion, precio_m2, poblacion, municipios, imagen, id))
+        mysql.connection.commit()
+        return redirect(url_for('listar_zonas_manager'))
+    cursor.execute("SELECT * FROM zonas WHERE id = %s", (id,))
+    zona = cursor.fetchone()
+    return render_template('editar_zona_manager.html', zona=zona)
+
+@app.route('/manager/zonas/eliminar/<int:id>')
+def eliminar_zona_manager(id):
+    cursor = mysql.connection.cursor()
+    cursor.execute("DELETE FROM zonas WHERE id = %s", (id,))
+    mysql.connection.commit()
+    return redirect(url_for('listar_zonas_manager'))
+
+# Ejecutar la aplicación, constructor
 if __name__ == '__main__':
     app.run(debug=True)

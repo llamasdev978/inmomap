@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Zonas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="centered">
+    <div class="main-container" style="width: 90%; max-width: 70%;">
+        <h1>Gestión de Zonas</h1>
+        <a href="{{ url_for('dashboardManager') }}" class="btn">← Volver al Dashboard</a>
+        <table class="tabla-usuarios">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Precio €/m²</th>
+                    <th>Población</th>
+                    <th>Municipios</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for z in zonas %}
+                <tr>
+                    <td>{{ z.id }}</td>
+                    <td>{{ z.nombre }}</td>
+                    <td>{{ z.descripcion }}</td>
+                    <td>{{ z.precio_m2 }}</td>
+                    <td>{{ z.poblacion_total }}</td>
+                    <td>{{ z.municipios }}</td>
+                    <td>
+                        <a class="mini-btn" href="{{ url_for('editar_zona_manager', id=z.id) }}">Editar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,4 @@
+comparador de zonas - exportar datos por excel
+diferentes mapas interactivos
+presupuesto
+usuario guardar zonas en favoritos

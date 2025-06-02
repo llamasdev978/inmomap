@@ -6,8 +6,19 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <nav class="header-nav">
+      <div class="header">
+        <div>
+          <p class="dash-p">Mapa interactivo Comunidad de Madrid</p>
+        </div>
+        <div class="header-links">
+          <a href="">Mapa interactivo</a>
+          <a href="">Comparador</a>
+          <a href="">Estimador municipios</a>
+        </div>
+      </div>
+    </nav>
     <div class="dash-main-container">
-      <p class="dash-p">Mapa interactivo Comunidad de Madrid</p>
         <div class="dashboard-content">
             <div class="map-grid">
                 <img src="{{ url_for('static', filename='img/norte.png') }}" class="zona" alt="Norte" onclick="mostrarInfo('norte')">
@@ -16,7 +27,6 @@
                 <img src="{{ url_for('static', filename='img/oeste.png') }}" class="zona" alt="Oeste" onclick="mostrarInfo('oeste')">
                 <img src="{{ url_for('static', filename='img/centro.png') }}" class="zona" alt="Centro" onclick="mostrarInfo('centro')">
             </div>
-
               
             <div class="info-container">
                 <div class="info-box">

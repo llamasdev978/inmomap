@@ -143,7 +143,6 @@ def listar_zonas():
     zonas = cursor.fetchall()
     return render_template('crud_zonas.html', zonas=zonas)
 
-
 @app.route('/admin/zonas/editar/<int:id>', methods=['GET', 'POST'])
 def editar_zona(id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -204,6 +203,76 @@ def eliminar_zona_manager(id):
     cursor.execute("DELETE FROM zonas WHERE id = %s", (id,))
     mysql.connection.commit()
     return redirect(url_for('listar_zonas_manager'))
+
+
+from flask import render_template, request, Response
+import MySQLdb.cursors
+
+@app.route('/presupuestos')
+def presupuestos():
+    min_coste = request.args.get('min_coste', type=float)
+    max_coste = request.args.get('max_coste', type=float)
+    min_superficie = request.args.get('min_superficie', type=float)
+    max_superficie = request.args.get('max_superficie', type=float)
+
+    query = "SELECT * FROM presupuestos WHERE 1=1"
+    params = []
+
+    if min_coste is not None:
+        query += " AND coste_m2 >= %s"
+        params.append(min_coste)
+    if max_coste is not None:
+        query += " AND coste_m2 <= %s"
+        params.append(max_coste)
+    if min_superficie is not None:
+        query += " AND superficie >= %s"
+        params.append(min_superficie)
+    if max_superficie is not None:
+        query += " AND superficie <= %s"
+        params.append(max_superficie)
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(query, params)
+    presupuestos = cursor.fetchall()
+
+    return render_template("presupuestos.html", presupuestos=presupuestos)
+
+@app.route('/exportar_presupuestos')
+def exportar_presupuestos():
+    min_coste = request.args.get('min_coste', type=float)
+    max_coste = request.args.get('max_coste', type=float)
+    min_superficie = request.args.get('min_superficie', type=float)
+    max_superficie = request.args.get('max_superficie', type=float)
+
+    query = "SELECT * FROM presupuestos WHERE 1=1"
+    params = []
+
+    if min_coste is not None:
+        query += " AND coste_m2 >= %s"
+        params.append(min_coste)
+    if max_coste is not None:
+        query += " AND coste_m2 <= %s"
+        params.append(max_coste)
+    if min_superficie is not None:
+        query += " AND superficie >= %s"
+        params.append(min_superficie)
+    if max_superficie is not None:
+        query += " AND superficie <= %s"
+        params.append(max_superficie)
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(query, params)
+    presupuestos = cursor.fetchall()
+
+    # Generar contenido CSV
+    def generar_csv():
+        yield "Municipio,Superficie,Coste_m2,Precio_Estimado\n"
+        for p in presupuestos:
+            yield f"{p['municipio']},{p['superficie']},{p['coste_m2']},{p['precio_estimado']}\n"
+
+    return Response(generar_csv(), mimetype='text/csv',
+                    headers={"Content-Disposition": "attachment; filename=presupuestos.csv"})
+
 
 # Ejecutar la aplicación, constructor
 if __name__ == '__main__':

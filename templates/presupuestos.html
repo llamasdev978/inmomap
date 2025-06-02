@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Presupuestos por Municipio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="body-normal">
+    <nav class="header-nav">
+      <div class="header">
+        <div>
+          <p class="dash-p">Presupuestos por Municipio</p>
+        </div>
+        <div class="header-links">
+          <a href="">Mapa interactivo</a>
+          <a href="">Comparador</a>
+          <a href="">Estimador municipios</a>
+        </div>
+      </div>
+    </nav>
+
+  <div class="presupuestos-container">
+    <form method="GET" action="{{ url_for('presupuestos') }}" class="presupuestos-form">
+      <label>Coste mínimo €/m²:
+        <input type="number" step="0.01" name="min_coste" value="{{ request.args.get('min_coste', '') }}">
+      </label>
+      <label>Coste máximo €/m²:
+        <input type="number" step="0.01" name="max_coste" value="{{ request.args.get('max_coste', '') }}">
+      </label>
+      <label>Superficie mínima (m²):
+        <input type="number" step="0.01" name="min_superficie" value="{{ request.args.get('min_superficie', '') }}">
+      </label>
+      <label>Superficie máxima (m²):
+        <input type="number" step="0.01" name="max_superficie" value="{{ request.args.get('max_superficie', '') }}">
+      </label>
+
+      <div class="presupuestos-buttons">
+        <input type="submit" value="Filtrar" class="btn-skinny">
+        <a class="btn-skinny" href="{{ url_for('exportar_presupuestos') }}?min_coste={{ request.args.get('min_coste', '') }}&max_coste={{ request.args.get('max_coste', '') }}&min_superficie={{ request.args.get('min_superficie', '') }}&max_superficie={{ request.args.get('max_superficie', '') }}">Exportar CSV</a>
+      </div>
+    </form>
+
+    <p style="text-align:center; font-weight: bold; color:chartreuse;">{{ presupuestos|length }} resultado{{ 's' if presupuestos|length != 1 else '' }} encontrado{{ 's' if presupuestos|length != 1 else '' }}.</p>
+
+    <table class="presupuestos-table">
+      <thead>
+        <tr>
+          <th>Municipio</th>
+          <th>Superficie (m²)</th>
+          <th>Coste/m² (€)</th>
+          <th>Precio Estimado (€)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for presupuesto in presupuestos %}
+        <tr>
+          <td>{{ presupuesto.municipio }}</td>
+          <td>{{ presupuesto.superficie }}</td>
+          <td>{{ presupuesto.coste_m2 }}</td>
+          <td>{{ presupuesto.precio_estimado }}</td>
+        </tr>
+        {% endfor %}
+        {% if presupuestos|length == 0 %}
+        <tr><td colspan="4" style="text-align:center;">No se encontraron resultados.</td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

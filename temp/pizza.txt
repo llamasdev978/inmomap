@@ -1,3 +1,0 @@
-comparador de zonas - exportar datos por excel
-diferentes mapas interactivos
-presupuesto

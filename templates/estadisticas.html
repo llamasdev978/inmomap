@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Estadísticas del mercado</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="body-normal">
+    <nav class="header-nav">
+      <div class="header">
+        <div>
+          <p class="dash-p">Mapa interactivo Comunidad de Madrid</p>
+        </div>
+        <div class="header-links">
+          <a href="{{ url_for('dashboard') }}">Mapa interactivo</a>
+          <a href="{{ url_for('estadisticas') }}">Comparador</a>
+          <a href="{{ url_for('presupuestos') }}">Estimador municipios</a>
+        </div>
+      </div>
+    </nav>
+
+  <div class="presupuestos-container">
+    <h2>Estadísticas del mercado inmobiliario</h2>
+
+    <section class="estadisticas-section">
+        <h3>Precio medio por zona (€ / m²)</h3>
+        <div class="chart-wrapper">
+            <canvas id="graficoPrecioZona"></canvas>
+        </div>
+    </section>
+
+    <section class="estadisticas-section">
+        <h3>Municipios con mayor superficie (m²)</h3>
+        <div class="chart-wrapper">
+            <canvas id="graficoSuperficieMayor"></canvas>
+        </div>
+    </section>
+
+    <section class="estadisticas-section">
+        <h3>Municipios con mejor relación coste/superficie</h3>
+        <div class="chart-wrapper">
+            <canvas id="graficoRelacion"></canvas>
+        </div>
+    </section>
+
+  </div>
+
+  <script>
+        const ctxPrecioZona = document.getElementById('graficoPrecioZona').getContext('2d');
+        new Chart(ctxPrecioZona, {
+        type: 'bar',
+        data: {
+            labels: {{ zonas | tojson }},
+            datasets: [{
+            label: '€/m²',
+            data: {{ precios | tojson }},
+            backgroundColor: '#2980b9'
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+            legend: {
+                display: false,
+                labels: { color: "#ffffff" }
+            },
+            tooltip: {
+                titleColor: "#ffffff",
+                bodyColor: "#ffffff",
+                backgroundColor: "#2c3e50"
+            }
+            },
+            scales: {
+            x: {
+                ticks: { color: "#ffffff" },
+                grid: { color: "#555" }
+            },
+            y: {
+                ticks: { color: "#ffffff" },
+                grid: { color: "#555" }
+            }
+            }
+        }
+        });
+
+
+        const ctxSuperficieMayor = document.getElementById('graficoSuperficieMayor').getContext('2d');
+        new Chart(ctxSuperficieMayor, {
+        type: 'line',
+        data: {
+            labels: {{ top_municipios_superficie | tojson }},
+            datasets: [{
+            label: 'Superficie media (m²)',
+            data: {{ top_superficies | tojson }},
+            fill: true,
+            borderColor: '#1abc9c',
+            backgroundColor: 'rgba(26, 188, 156, 0.3)',
+            tension: 0.3,
+            pointBackgroundColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+            legend: { labels: { color: "#ffffff" } },
+            tooltip: {
+                titleColor: "#ffffff",
+                bodyColor: "#ffffff",
+                backgroundColor: "#2c3e50"
+            }
+            },
+            scales: {
+            x: {
+                ticks: { color: "#ffffff" },
+                grid: { color: "#555" }
+            },
+            y: {
+                ticks: { color: "#ffffff" },
+                grid: { color: "#555" }
+            }
+            }
+        }
+        });
+
+        const ctxRelacion = document.getElementById('graficoRelacion').getContext('2d');
+        new Chart(ctxRelacion, {
+        type: 'bar',
+        data: {
+            labels: {{ top_municipios_relacion | tojson }},
+            datasets: [{
+            label: '€/m² respecto superficie',
+            data: {{ top_relaciones | tojson }},
+            backgroundColor: '#f39c12'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+            legend: {
+                display: false,
+                labels: { color: "#ffffff" }
+            },
+            tooltip: {
+                titleColor: "#ffffff",
+                bodyColor: "#ffffff",
+                backgroundColor: "#2c3e50"
+            }
+            },
+            scales: {
+            x: {
+                ticks: { color: "#ffffff" },
+                grid: { color: "#555" }
+            },
+            y: {
+                ticks: { color: "#ffffff" },
+                grid: { color: "#555" }
+            }
+            }
+        }
+        });
+        
+  </script>
+</body>
+</html>

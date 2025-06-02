@@ -66,6 +66,23 @@ def register():
             return "Usuario ya existe"
     return render_template('register.html')
 
+
+# Página protegida que muestra el rol actual
+@app.route('/dashboard')
+def dashboard():
+    rol = session.get('rol')
+
+    if 'rol' not in session:
+        # Redirigir al login si no hay sesión iniciada
+        return redirect(url_for('login'))
+    # Mostrar el rol del usuario logueado
+    if rol == 'admin':
+        return render_template('dashboard-admin.html')
+    elif rol == 'manager':
+        return render_template('dashboard-manager.html')
+    else:
+        return render_template('dashboard-user.html')
+    
 # Página protegida que muestra el rol actual
 @app.route('/dashboard-user')
 def dashboardUser():
@@ -272,6 +289,69 @@ def exportar_presupuestos():
 
     return Response(generar_csv(), mimetype='text/csv',
                     headers={"Content-Disposition": "attachment; filename=presupuestos.csv"})
+
+@app.route('/estadisticas')
+def estadisticas():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    # 1. Precio medio por zona
+    zonas_dict = {
+        "Norte": ["Colmenar Viejo", "Tres Cantos", "San Sebastián de los Reyes", "Alcobendas", "Algete"],
+        "Sur": ["Getafe", "Leganés", "Fuenlabrada", "Parla", "Pinto"],
+        "Este": ["Alcalá de Henares", "Torrejón de Ardoz", "Coslada", "Arganda del Rey"],
+        "Oeste": ["Pozuelo de Alarcón", "Majadahonda", "Las Rozas de Madrid", "Boadilla del Monte"],
+        "Centro": ["Madrid"]
+    }
+
+    zonas = []
+    precios = []
+    for zona, municipios in zonas_dict.items():
+        placeholders = ','.join(['%s'] * len(municipios))
+        query = f"""
+            SELECT AVG(coste_m2) AS media_precio
+            FROM presupuestos
+            WHERE municipio IN ({placeholders})
+        """
+        cursor.execute(query, municipios)
+        result = cursor.fetchone()
+        zonas.append(zona)
+        precios.append(round(result["media_precio"] or 0, 2))
+
+    # 2. Top 5 municipios con mayor superficie media
+    cursor.execute("""
+        SELECT municipio, AVG(superficie) AS media_superficie
+        FROM presupuestos
+        GROUP BY municipio
+        ORDER BY media_superficie DESC
+        LIMIT 5
+    """)
+    superficie_result = cursor.fetchall()
+    top_municipios_superficie = [row["municipio"] for row in superficie_result]
+    top_superficies = [round(row["media_superficie"], 2) for row in superficie_result]
+
+    # 3. Municipios con mejor relación coste/superficie
+    cursor.execute("""
+        SELECT municipio, AVG(precio_estimado / superficie) AS relacion
+        FROM presupuestos
+        WHERE superficie > 0
+        GROUP BY municipio
+        ORDER BY relacion ASC
+        LIMIT 5
+    """)
+    relacion_result = cursor.fetchall()
+    top_municipios_relacion = [row["municipio"] for row in relacion_result]
+    top_relaciones = [round(row["relacion"], 2) for row in relacion_result]
+
+    return render_template(
+        "estadisticas.html",
+        zonas=zonas,
+        precios=precios,
+        top_municipios_superficie=top_municipios_superficie,
+        top_superficies=top_superficies,
+        top_municipios_relacion=top_municipios_relacion,
+        top_relaciones=top_relaciones
+    )
+
 
 
 # Ejecutar la aplicación, constructor

@@ -390,3 +390,23 @@ input[type="text"], input[type="password"], input[type="email"] {
 .btn-skinny:hover {
   background: #1f6391;
 }
+
+.estadisticas-section {
+  margin-bottom: 2rem;
+}
+
+.estadisticas-section h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #ecf0f1;
+}
+
+.chart-wrapper {
+  max-width: 800px;
+  margin: auto;
+}
+
+.chart-wrapper canvas {
+  max-height: 300px;
+  width: 100%;
+}

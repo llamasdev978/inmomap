@@ -366,7 +366,6 @@ input[type="text"], input[type="password"], input[type="email"] {
   border-bottom: 1px solid #1f2d3a;
   text-align: left;
 }
-
 .presupuestos-table th {
   background-color: #1a1a1a;
 }
@@ -383,6 +382,18 @@ input[type="text"], input[type="password"], input[type="email"] {
   text-decoration: none;
   color: #fff;
   background: #2980b9;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-skinny-red {
+  text-align: center;
+  font-weight: bold;
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  text-decoration: none;
+  color: #fff;
+  background: #b92929;
   border: none;
   cursor: pointer;
 }

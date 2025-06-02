@@ -15,6 +15,8 @@
             <input type="text" name="nombre" value="{{ usuario.nombre }}" required>
             <label>Email:</label>
             <input type="email" name="email" value="{{ usuario.email }}" required>
+            <label for="fecha_alta">Fecha de alta:</label>
+            <input type="date" name="fecha_alta" value="{{ usuario.fecha_alta }}" max="{{ fecha_actual }}">
             <label>Rol:</label>
             <select name="rol">
                 <option value="admin" {% if usuario.rol == 'admin' %}selected{% endif %}>Admin</option>

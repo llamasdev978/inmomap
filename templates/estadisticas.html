@@ -14,7 +14,7 @@
         </div>
         <div class="header-links">
           <a href="{{ url_for('dashboard') }}">Mapa interactivo</a>
-          <a href="{{ url_for('estadisticas') }}">Comparador</a>
+          <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
           <a href="{{ url_for('presupuestos') }}">Estimador municipios</a>
         </div>
       </div>
@@ -38,12 +38,11 @@
     </section>
 
     <section class="estadisticas-section">
-        <h3>Municipios con mejor relación coste/superficie</h3>
+        <h3>Relación superficie vs. precio estimado</h3>
         <div class="chart-wrapper">
-            <canvas id="graficoRelacion"></canvas>
+            <canvas id="graficoDispersion"></canvas>
         </div>
     </section>
-
   </div>
 
   <script>
@@ -125,45 +124,58 @@
             }
         }
         });
-
-        const ctxRelacion = document.getElementById('graficoRelacion').getContext('2d');
-        new Chart(ctxRelacion, {
-        type: 'bar',
-        data: {
-            labels: {{ top_municipios_relacion | tojson }},
+        
+        const dispersionData = {
             datasets: [{
-            label: '€/m² respecto superficie',
-            data: {{ top_relaciones | tojson }},
-            backgroundColor: '#f39c12'
+            label: 'Municipios',
+            data: [
+                {% for p in dispersion %}
+                { x: {{ p.superficie }}, y: {{ p.precio_estimado }}, label: "{{ p.municipio }}" },
+                {% endfor %}
+            ],
+            backgroundColor: 'rgba(52, 152, 219, 0.7)',
+            pointRadius: 5
             }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
+        };
+
+        const configDispersion = {
+            type: 'scatter',
+            data: dispersionData,
+            options: {
             plugins: {
-            legend: {
-                display: false,
-                labels: { color: "#ffffff" }
-            },
-            tooltip: {
-                titleColor: "#ffffff",
-                bodyColor: "#ffffff",
-                backgroundColor: "#2c3e50"
-            }
+                tooltip: {
+                callbacks: {
+                    label: function(context) {
+                    const punto = context.raw;
+                    return `${punto.label}: ${punto.x} m², ${punto.y} €`;
+                    }
+                }
+                },
+                legend: {
+                display: false
+                },
+                title: {
+                display: true,
+                text: 'Superficie vs. Precio estimado',
+                color: 'white'
+                }
             },
             scales: {
-            x: {
-                ticks: { color: "#ffffff" },
-                grid: { color: "#555" }
-            },
-            y: {
-                ticks: { color: "#ffffff" },
-                grid: { color: "#555" }
+                x: {
+                title: { display: true, text: 'Superficie (m²)', color: 'white' },
+                ticks: { color: 'white' },
+                grid: { color: '#555' }
+                },
+                y: {
+                title: { display: true, text: 'Precio estimado (€)', color: 'white' },
+                ticks: { color: 'white' },
+                grid: { color: '#555' }
+                }
             }
             }
-        }
-        });
-        
+        };
+
+        new Chart(document.getElementById('graficoDispersion'), configDispersion);
   </script>
 </body>
 </html>

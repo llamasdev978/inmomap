@@ -3,6 +3,8 @@ from flask_mysqldb import MySQL
 from datetime import date
 import MySQLdb.cursors
 
+# Para instalar todas las dependencias necesarias
+# pip install flask flask-mysqldb
 
 # instanciamos flask como app
 app = Flask(__name__)
